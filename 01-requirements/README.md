@@ -28,12 +28,23 @@
 ## 操作流程(搭配 grill-me skill)
 
 用 `grill-me` skill 讓 Claude Code 逐題追問,把你腦中模糊的需求逼出結構。
-skill 本體在 `.claude/skills/grill-me/`(注意是**連字號** `grill-me`,不是底線)。
+skill 裝在使用者層 `~/.claude/skills/grill-me/`(注意是**連字號** `grill-me`,不是底線)。
 
 ### 前置
 
+> 假設這個流程包 clone 在全域(如 `~/dev-process`),`/grill-me` 已裝在 `~/.claude/skills/`。
+> 用法見根目錄 [`../README.md`](../README.md)「如何在開發專案中使用」。
+
+在你的開發專案根目錄:
+
 - **開一輪乾淨的對話**(這一步從零開始,不要接在別的任務後面)。
 - 確認 skill 可用:輸入 `/grill-me` 應該會觸發訪談。
+- 把這一步要填的模板複製進專案 `docs/`(只複製要用的那份,避免雜訊進 context):
+  ```bash
+  mkdir -p docs/01-requirements
+  cp ~/dev-process/01-requirements/requirements.md docs/01-requirements/<專案名>-requirements.md
+  cp ~/dev-process/01-requirements/user-persona.md docs/01-requirements/<專案名>-user-persona.md
+  ```
 
 ### 第一步:用 grill-me 對齊功能需求
 
@@ -67,20 +78,22 @@ skill 本體在 `.claude/skills/grill-me/`(注意是**連字號** `grill-me`,不
 問答收斂、你覺得「需求講清楚了」之後,複製下面這段:
 
 ```
-根據我們剛剛的對話,用 01-requirements/requirements.md 這份模板的結構,
-填成一份對齊後的需求文件,輸出到 01-requirements/<專案名>-requirements.md。
-模板裡我們沒談到的欄位標 TBD,不要自己編內容。
-另外用 01-requirements/user-persona.md 的結構,把使用者輪廓填到同一個資料夾。
+根據我們剛剛的對話,把 docs/01-requirements/<專案名>-requirements.md 這份文件填好
+(它是需求文件模板,就地填寫)。沒談到的欄位標 TBD,不要自己編內容。
+使用者輪廓填進 docs/01-requirements/<專案名>-user-persona.md。
 ```
 
-如果剛剛的訪談有聊到競品或現況,再補一句:
+如果剛剛的訪談有聊到競品或現況,先把模板複製進來再請 Claude 填:
 
 ```
-剛剛有提到競品/現況,順便用 01-requirements/competitive-analysis.md 的結構填一份。
+cp ~/dev-process/01-requirements/competitive-analysis.md docs/01-requirements/<專案名>-competitive-analysis.md
+```
+```
+剛剛有提到競品/現況,把 docs/01-requirements/<專案名>-competitive-analysis.md 填好。
 ```
 
-> 產出的檔案放在這個資料夾內、檔名帶專案名(例:`acme-requirements.md`),
-> 模板本身(`requirements.md` 等)保持乾淨不要覆蓋——模板是拿來複製的,不是拿來填的。
+> 進 context 的只有你複製進 `docs/` 的那幾份模板 + 對話。全域那份模板保持乾淨,
+> 永遠是拿來複製的,不要就地填。
 
 ---
 
@@ -93,13 +106,13 @@ skill 本體在 `.claude/skills/grill-me/`(注意是**連字號** `grill-me`,不
 | **文件已寫到檔案、要進下一步前** | 先確認檔案存在,再 `/clear` | 下一步(`02-design`)的 context 來源是**已落地的需求文件**,不是這輪對話 |
 
 這呼應一條核心原則:**階段之間靠檔案交接,不靠對話記憶**。
-只要需求文件確實寫進了 `01-requirements/`,你就可以放心 `/clear`,下一步重新讀那份檔案即可。
+只要需求文件確實寫進了 `docs/01-requirements/`,你就可以放心 `/clear`,下一步重新讀那份檔案即可。
 
 ---
 
 ## 完成標準(進入 `02-design-system/` 前)
 
-- [ ] `<專案名>-requirements.md` 已填,且 Must / Nice-to-have / Out-of-scope 清楚
+- [ ] `docs/01-requirements/<專案名>-requirements.md` 已填,且 Must / Nice-to-have / Out-of-scope 清楚
 - [ ] 成功指標可衡量(不是「好用」這種)
 - [ ] 關鍵使用者故事都有驗收標準
 - [ ] 沒有未解的「這到底要不要做」

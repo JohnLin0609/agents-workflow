@@ -74,6 +74,37 @@
 | 維運 | 08-operations/ | 監控就緒、告警有 runbook |
 | 回顧 | 09-retrospectives/ | Action 有人有期限、累積到 lessons learned |
 
+## 如何在開發專案中使用(保持 context 乾淨)
+
+核心原則:**操作劇本是給人讀的,不要進 Claude 的 context 窗口**。所以這個流程包
+**不放進你的開發專案**,而是當作全域參考。三樣東西分三個地方:
+
+| 東西 | 放哪 | 誰讀 |
+|------|------|------|
+| 這個流程包(劇本 + 方法論 + 模板) | 全域 clone 一份,如 `~/dev-process` | **人**讀劇本、照著貼 prompt |
+| `grill-me` skill | 使用者層 `~/.claude/skills/` | Claude(被 `/grill-me` 觸發) |
+| 你填出來的文件(artifacts) | 你專案的 `docs/<階段>/` | 人 + Claude,跟專案一起 commit |
+
+### 一次性設定
+
+```bash
+git clone <repo> ~/dev-process
+cp -r ~/dev-process/.claude/skills/grill-me ~/.claude/skills/   # 讓 /grill-me 在所有專案可用
+```
+
+### 每跑一個階段
+
+1. **人**讀對應資料夾的 `README.md` 劇本(例:`~/dev-process/01-requirements/README.md`)。
+2. 把**那一份**要填的模板複製進專案 `docs/`,以專案名命名:
+   ```bash
+   mkdir -p docs/01-requirements
+   cp ~/dev-process/01-requirements/requirements.md docs/01-requirements/my-project-requirements.md
+   ```
+3. 照劇本在 Claude Code 裡操作。叫 Claude 填文件時,指向 `docs/...` 那份。
+
+這樣進 context 的只有**當下那一份模板 + 你的對話**——劇本、方法論、其他階段的模板
+都不會汙染。你不需要把整包 clone 進專案,也不需要只 clone 模板。
+
 ## 使用建議
 
 ### 1. 不是每份都要寫滿
