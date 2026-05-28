@@ -89,8 +89,19 @@
 
 ```bash
 git clone <repo> ~/dev-process
-cp -r ~/dev-process/.claude/skills/grill-me ~/.claude/skills/   # 讓 /grill-me 在所有專案可用
 ```
+
+`grill-me` 是第三方 skill,作者 [@mattpocock](https://github.com/mattpocock/skills),
+不隨本流程包散佈——請從上游自行安裝到使用者層,讓 `/grill-me` 在所有專案可用:
+
+```bash
+mkdir -p ~/.claude/skills/grill-me
+curl -fsSL https://raw.githubusercontent.com/mattpocock/skills/main/skills/productivity/grill-me/SKILL.md \
+  -o ~/.claude/skills/grill-me/SKILL.md
+```
+
+> 上游來源:<https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md>
+> (本 repo 的 `skills-lock.json` 也記錄了這個出處與雜湊。)
 
 ### 每跑一個階段
 

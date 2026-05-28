@@ -28,7 +28,9 @@
 ## 操作流程(搭配 grill-me skill)
 
 用 `grill-me` skill 讓 Claude Code 逐題追問,把你腦中模糊的需求逼出結構。
-skill 裝在使用者層 `~/.claude/skills/grill-me/`(注意是**連字號** `grill-me`,不是底線)。
+這是 [@mattpocock](https://github.com/mattpocock/skills) 的第三方 skill,裝在使用者層
+`~/.claude/skills/grill-me/`(注意是**連字號** `grill-me`,不是底線)。安裝方式見根目錄
+[`../README.md`](../README.md)「一次性設定」。
 
 ### 前置
 
